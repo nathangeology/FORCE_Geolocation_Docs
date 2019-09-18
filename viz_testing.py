@@ -2,6 +2,7 @@ import altair as alt
 from data_load_functions import *
 import folium
 import geopandas as gpd
+from folium.plugins import MarkerCluster
 
 if __name__ == '__main__':
     map_dict = create_npd_shapefile_dict()

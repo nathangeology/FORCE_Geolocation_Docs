@@ -9,6 +9,7 @@ def create_npd_shapefile_dict():
     files = {
         'blocks': 'sample_data/shapefiles/loc_npd_blocks.shp',
         'discoveries': 'sample_data/shapefiles/loc_npd_discoveries.shp',
+        'well_bores': 'sample_data/shapefiles/loc_npd_ea_wells.shp',
         'wells': 'sample_data/shapefiles/loc_npd_ea_wells.shp',
         'facilities': 'sample_data/shapefiles/loc_npd_facilities.shp',
         'fields': 'sample_data/shapefiles/loc_npd_fields.shp',
@@ -29,7 +30,8 @@ def get_key_words():
     key_cols = {
         'blocks': 'LABEL',
         'discoveries': 'Shape_Leng',
-        'wells': 'wlbWellbor',
+        'well_boress': 'wlbWellbor',
+        'wells': 'wlbWell',
         'facilities': 'FACNAME',
         'fields': 'FIELDNAME',
         'structures': 'steNameNO',

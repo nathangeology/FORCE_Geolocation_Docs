@@ -30,8 +30,8 @@ def get_key_words():
     key_cols = {
         'blocks': 'LABEL',
         'discoveries': 'Shape_Leng',
-        'wells': 'wlbWellbor',
-        'well_bores': 'wlbWell',
+        'well_boress': 'wlbWellbor',
+        'wells': 'wlbWell',
         'facilities': 'FACNAME',
         'fields': 'FIELDNAME',
         'structures': 'steNameNO',

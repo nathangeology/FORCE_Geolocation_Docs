@@ -1,5 +1,9 @@
-import geopandas as gpd
+try:
+    import geopandas as gpd
+except Exception as ex:
+    print(ex)
 import pandas as pd
+import pickle as pkl
 
 def load_shape_file(file):
     output = gpd.read_file(file)
@@ -29,7 +33,7 @@ def create_npd_shapefile_dict():
 def get_key_words():
     key_cols = {
         'blocks': 'LABEL',
-        'discoveries': 'Shape_Leng',
+        'discoveries': 'DISCNAME',
         'well_bores': 'wlbWellbor',
         'wells': 'wlbWell',
         'facilities': 'FACNAME',
@@ -41,7 +45,17 @@ def get_key_words():
     }
     output = []
     type = []
-    data_dict = create_npd_shapefile_dict()
+    try:
+        data_dict = create_npd_shapefile_dict()
+    except Exception as ex:
+        object = []
+        with open('npd_lookup_dfs_no_geopandas.pkl', 'rb') as openfile:
+            while True:
+                try:
+                    object.append(pkl.load(openfile))
+                except EOFError:
+                    break
+        data_dict = object[0]
     for key, value in data_dict.items():
         if 'well_header' not in key:
             df = pd.DataFrame(value)

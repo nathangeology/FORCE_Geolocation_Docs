@@ -1,6 +1,7 @@
 import PyPDF2
 from data_load_functions import *
 from collections import defaultdict
+import pickle as pkl
 
 if __name__ == "__main__":
     keywords, types = get_key_words()

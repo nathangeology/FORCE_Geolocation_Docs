@@ -1,4 +1,3 @@
-from tika import parser
 import PyPDF2
 
 if __name__ == "__main__":

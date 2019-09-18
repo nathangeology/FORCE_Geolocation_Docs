@@ -14,8 +14,10 @@ def get_dataframes():
     for i in keep_csvs.keys():
         csv_dataframes[i] = pd.read_csv(keep_csvs[i], sep=';', skiprows=range(9), encoding='iso-8859-1')
         temp_clean = csv_dataframes[i]
-        col = temp_clean.columns[0]
+        col = temp_clean.columns[-1]
         csv_dataframes[i] = temp_clean[temp_clean[col] != col].copy()
+        csv_dataframes[i].rename(columns={ col: i.split(".")[0]+" comment"}, 
+                 inplace=True)
         temp_clean = None
         
     return csv_dataframes

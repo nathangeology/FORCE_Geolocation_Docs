@@ -2,9 +2,12 @@ import PyPDF2
 from data_load_functions import *
 from collections import defaultdict
 import pickle as pkl
+import os
 
 if __name__ == "__main__":
     keywords, types = get_key_words()
+    # for file in os.walk('/sample_data'):
+    #     pass
     file = 'sample_data/Rock physics models for Cenozoic siliciclastic sediments in the North Sea.pdf'
     with open(file, 'rb') as pdfFileObj:
         pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
@@ -18,6 +21,7 @@ if __name__ == "__main__":
                     print('why!?')
             [output[x].append(page) for x in keywords if str(x) in string_cleaner(page_txt)]
             # print(page_txt)
+
         print('here')
 
     # attach document to matched entities

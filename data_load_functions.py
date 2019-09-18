@@ -29,6 +29,17 @@ def create_npd_shapefile_dict():
     output['well_header'] = pd.read_csv('sample_data/with-coordinates.csv', delimiter=';')
     return output
 
+def string_cleaner(a_string:str):
+    output = a_string
+    output = output.replace('\u00C5', 'aa')
+    output = output.replace('\u00E5', 'aa')
+    output = output.replace('\u00C6', 'ae')
+    output = output.replace('\u00E6', 'ae')
+    output = output.replace('\u00C8', 'oe')
+    output = output.replace('\u00E8', 'oe')
+    output = output.lower()
+
+    return output
 
 def get_key_words():
     key_cols = {
@@ -44,26 +55,27 @@ def get_key_words():
         'sub_areas': 'NAME',
     }
     output = []
-    type = []
+    type_of = []
     try:
         data_dict = create_npd_shapefile_dict()
     except Exception as ex:
-        object = []
+        objects = []
         with open('npd_lookup_dfs_no_geopandas.pkl', 'rb') as openfile:
             while True:
                 try:
-                    object.append(pkl.load(openfile))
+                    objects.append(pkl.load(openfile))
                 except EOFError:
                     break
-        data_dict = object[0]
+        data_dict = objects[0]
     for key, value in data_dict.items():
         if 'well_header' not in key:
             df = pd.DataFrame(value)
             temp = list(df[key_cols[key]])
+            temp = [string_cleaner(x) for x in temp]
             temp_type = [key] * len(temp)
-            type += temp_type
+            type_of += temp_type
             output += temp
-    return output, type
+    return output, type_of
 
 def strip_out_geopandas(data_dict):
     output = {}

@@ -9,29 +9,27 @@ def compare_well_names(well1, well2, s_chars=["/","-"]):
     pass
 
 
-
-
-
-
-
 def name_cleaner(word):
-    intermediate = ["_COMPLETION_REPORT_", "__WELL__", "_PB"]
-    if intermediate[0] in word:
-        sp = intermediate[0]
-    elif intermediate[1] in word:
-        sp = intermediate[1]
-    elif intermediate[2] in word:
-        sp = intermediate[2]
-    else:
-        return word
-    return word.split(sp)[0]
+    
+    intermediate = ["COMPLETION_REPORT", "WELL", "PB", "AND"]
+    
+    for i in intermediate:
+        if i in word:
+            sp = i
+            word = word.split(sp)[0]
+    
+    while True :
+        if not (word[-1].isalpha() or word[-1].isdigit()) :
+            word = word[:-1]
+        else:
+            break
+    return word
 
 
 def get_dataframes():
     folder = "sample_data/Norwegian well  completion reports and label data for hydrocarbon shows"
     keep_csvs = { i: folder+"/"+i for i in os.listdir(folder) if ".csv" in i}
     print("found", keep_csvs.keys()) 
-    # csv_dataframes = {i: pd.read_csv(keep_csvs[i], sep=';', skiprows=range(9), encoding='iso-8859-1') for i in keep_csvs.keys() }
     
     csv_dataframes = {}
     for i in keep_csvs.keys():
@@ -44,6 +42,12 @@ def get_dataframes():
         
         names_col = temp_clean.columns[0]
         csv_dataframes[i][names_col] = csv_dataframes[i][names_col].apply(name_cleaner)
+        
+
+        
         temp_clean = None
         
     return csv_dataframes
+
+
+get_dataframes()

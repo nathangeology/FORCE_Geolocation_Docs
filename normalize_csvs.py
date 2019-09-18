@@ -4,6 +4,29 @@
 import os
 import pandas as pd
 
+
+def compare_well_names(well1, well2, s_chars=["/","-"]):
+    pass
+
+
+
+
+
+
+
+def name_cleaner(word):
+    intermediate = ["_COMPLETION_REPORT_", "__WELL__", "_PB"]
+    if intermediate[0] in word:
+        sp = intermediate[0]
+    elif intermediate[1] in word:
+        sp = intermediate[1]
+    elif intermediate[2] in word:
+        sp = intermediate[2]
+    else:
+        return word
+    return word.split(sp)[0]
+
+
 def get_dataframes():
     folder = "sample_data/Norwegian well  completion reports and label data for hydrocarbon shows"
     keep_csvs = { i: folder+"/"+i for i in os.listdir(folder) if ".csv" in i}
@@ -18,6 +41,9 @@ def get_dataframes():
         csv_dataframes[i] = temp_clean[temp_clean[col] != col].copy()
         csv_dataframes[i].rename(columns={ col: i.split(".")[0]+" comment"}, 
                  inplace=True)
+        
+        names_col = temp_clean.columns[0]
+        csv_dataframes[i][names_col] = csv_dataframes[i][names_col].apply(name_cleaner)
         temp_clean = None
         
     return csv_dataframes

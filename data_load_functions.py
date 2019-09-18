@@ -29,7 +29,7 @@ def create_npd_shapefile_dict():
 def get_key_words():
     key_cols = {
         'blocks': 'LABEL',
-        'discoveries': 'Shape_Leng',
+        'discoveries': 'DISCNAME',
         'well_bores': 'wlbWellbor',
         'wells': 'wlbWell',
         'facilities': 'FACNAME',

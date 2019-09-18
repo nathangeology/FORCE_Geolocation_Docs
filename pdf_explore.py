@@ -3,14 +3,15 @@ from .data_load_functions import *
 
 if __name__ == "__main__":
     keywords, types = get_key_words()
-    file =  'sample_data/Rock physics models for Cenozoic siliciclastic sediments in the North Sea.pdf'
+    file = 'sample_data/Rock physics models for Cenozoic siliciclastic sediments in the North Sea.pdf'
     with open(file, 'rb') as pdfFileObj:
         pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
         print(pdfReader.numPages)
+        output = {}
         for page in range(pdfReader.numPages):
             pageObj = pdfReader.getPage(page)
             page_txt = pageObj.extractText()
-
+            [for x in keywords if x in page_txt]
             print(page_txt)
 
     # raw = parser.from_file(

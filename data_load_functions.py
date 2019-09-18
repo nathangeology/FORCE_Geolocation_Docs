@@ -49,5 +49,15 @@ def get_key_words():
             temp_type = [key] * len(temp)
             type += temp_type
             output += temp
-            print('here')
     return output, type
+
+def strip_out_geopandas(data_dict):
+    output = {}
+    for key, value in data_dict.items():
+        if 'well_header' not in key:
+            df = pd.DataFrame(value)
+            output[key] = df
+        else:
+            output[key] = value
+    return output
+

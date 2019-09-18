@@ -29,6 +29,17 @@ def create_npd_shapefile_dict():
     output['well_header'] = pd.read_csv('sample_data/with-coordinates.csv', delimiter=';')
     return output
 
+def string_cleaner(a_string:str):
+    output = a_string
+    output = output.replace('\u00C5', 'aa')
+    output = output.replace('\u00E5', 'aa')
+    output = output.replace('\u00C6', 'ae')
+    output = output.replace('\u00E6', 'ae')
+    output = output.replace('\u00C8', 'oe')
+    output = output.replace('\u00E8', 'oe')
+    output = output.lower()
+
+    return output
 
 def get_key_words():
     key_cols = {
@@ -60,6 +71,7 @@ def get_key_words():
         if 'well_header' not in key:
             df = pd.DataFrame(value)
             temp = list(df[key_cols[key]])
+            temp = [string_cleaner(x) for x in temp]
             temp_type = [key] * len(temp)
             type += temp_type
             output += temp

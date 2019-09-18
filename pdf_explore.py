@@ -15,9 +15,13 @@ if __name__ == "__main__":
             for idx, x in enumerate(keywords):
                 if not isinstance(x, str):
                     print('why!?')
-            [output[x].append(page) for x in keywords if str(x) in page_txt]
+            [output[x].append(page) for x in keywords if str(x) in string_cleaner(page_txt)]
             # print(page_txt)
         print('here')
+
+    # attach document to matched entities
+
+
 
     # raw = parser.from_file(
     #     'sample_data/Rock physics models for Cenozoic siliciclastic sediments in the North Sea.pdf')

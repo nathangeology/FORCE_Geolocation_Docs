@@ -10,5 +10,3 @@ def get_dataframes():
     print("found", keep_csvs.keys()) 
     csv_dataframes = {i: pd.read_csv(keep_csvs[i], sep=';', skiprows=range(9), encoding='iso-8859-1') for i in keep_csvs.keys() }
     return csv_dataframes
-
-get_dataframes()

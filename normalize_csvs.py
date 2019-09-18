@@ -5,8 +5,17 @@ import os
 import pandas as pd
 
 
-def compare_well_names(well1, well2, s_chars=["/","-"]):
-    pass
+def compare_well_names(well1, well2, s_chars=["/","-"," "]):
+    
+    for x,y in zip(well1,well2):
+        if x!=y:
+            if (x in s_chars) and (y in s_chars):
+                continue
+            else:
+                print(well1,"!=",well2)
+                return False
+    
+    return True
 
 
 def name_cleaner(word):
@@ -17,7 +26,6 @@ def name_cleaner(word):
         if i in word:
             sp = i
             word = word.split(sp)[0]
-    
     while True :
         if not (word[-1].isalpha() or word[-1].isdigit()) :
             word = word[:-1]
@@ -43,6 +51,7 @@ def get_dataframes():
         names_col = temp_clean.columns[0]
         csv_dataframes[i][names_col] = csv_dataframes[i][names_col].apply(name_cleaner)
         
+        csv_dataframes[i] = csv_dataframes[i].groupby(names_col, as_index=False).agg(lambda x :','.join(x))
 
         
         temp_clean = None
@@ -50,4 +59,4 @@ def get_dataframes():
     return csv_dataframes
 
 
-get_dataframes()
+#get_dataframes()

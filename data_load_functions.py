@@ -31,6 +31,7 @@ def create_npd_shapefile_dict():
     output['well_header'] = pd.read_csv('sample_data/with-coordinates.csv', delimiter=';')
     return output
 
+
 def string_cleaner(a_string:str):
     output = a_string
     output = output.replace('\u00C5', 'aa')
@@ -42,6 +43,8 @@ def string_cleaner(a_string:str):
     output = output.lower()
 
     return output
+
+
 def get_key_cols():
     key_cols = {
         'blocks': 'LABEL',

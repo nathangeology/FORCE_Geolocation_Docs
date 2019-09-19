@@ -53,6 +53,7 @@ def create_layer(geo_table, name, label_col=None, secondary_label_col=None, laye
             temp_layer = Polygon(locations=locations,
                 color=color,
                 fill_color=color,
+                opacity=0.8,
             )
         elif layer_type == 'marker':
             temp_layer = CircleMarker(

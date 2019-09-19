@@ -6,6 +6,7 @@ import pickle
 
 if __name__ == '__main__':
     objects = []
+    output = []
     with open('joined_dfs.pkl', 'rb') as openfile:
         while True:
             try:
@@ -22,12 +23,22 @@ if __name__ == '__main__':
     shape_files_dict = create_npd_shapefile_dict()
     key_cols = get_key_cols()
     for key, value in shape_files_dict.items():
+        value['document'] = None
         if key == 'well_header':
             continue
         keyword_col = key_cols[key]
         value['cleaned_keywords'] = value[keyword_col].apply(clean_text)
-        shape_keyset = set(value['cleaned_keywords'])
+        value.set_index(['cleaned_keywords'], drop=False, inplace=True)
+        shape_keyset = set(list(pd.Series(value['cleaned_keywords'])))
         matched_keys = shape_keyset.intersection(doc_keywords_set)
         for matched_key in list(matched_keys):
-            print('here')
+            matches = get_keywords_doc.loc[matched_key]
+            if isinstance(matches, pd.DataFrame):
+                docs = list(matches['cleaned_doc'])
+                list_of_docs = ','.join(docs)
+                value.loc[matched_key, 'document'] = list_of_docs
+            else:
+                value.loc[matched_key, 'document'] = matches['cleaned_doc']
+        output[key] = value
+
         print('here')

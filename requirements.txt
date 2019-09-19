@@ -1,4 +1,7 @@
 boto3
 PyPDF2
-geopandas
+geopandas=='0.4.1'
 gdal
+ipyleaflet
+ipywidgets
+

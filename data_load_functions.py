@@ -105,7 +105,8 @@ def clean_text(txt):
 
     @ author:  Christopher Olsen, ConocoPhillips
     """
-
+    if isinstance(txt, str):
+        txt = [txt]
     txt = [x.lower() for x in txt]  # For ease of use, convert all characters to lowercase
     txt = [x.replace('/', '_') for x in txt]  # Convert forward slash to underscore
     txt = [x.replace('\u00C5', 'aa') for x in txt]  # Convert Norwegian (uppercase version, just in case) to aa
@@ -119,7 +120,8 @@ def clean_text(txt):
     txt = [x.replace('\u25A1', '') for x in txt]  # Replace 'Yen' symbol with nothing
     txt = [x.replace('\25', '') for x in txt]  # Replace unfilled square with nothing
     #     txt = [x.replace(' ', '_') for x in txt]             # Not used:  Convert whitespace to underscores
-
+    if len(txt) == 1:
+        txt = txt[0]
     return txt
 
 
@@ -193,3 +195,43 @@ def PreprocessKeyWords(key_words, clean=True, exception_list=None, min_chars=3):
 def clean_doc_name(x):
     output = x.split('/')
     return output[-1]
+
+
+def get_prepped_dfs():
+    objects = []
+    output = {}
+    with open('joined_dfs.pkl', 'rb') as openfile:
+        while True:
+            try:
+                objects.append(pkl.load(openfile))
+            except EOFError:
+                break
+    mudlog_well_header = objects[0]
+    output['mudlog_wells'] = mudlog_well_header
+    get_keywords_doc = pd.read_csv('result.csv')
+    get_keywords_doc['cleaned_doc'] = get_keywords_doc['document'].apply(clean_doc_name)
+    get_keywords_doc.set_index(['keyword', 'cleaned_doc'],
+                               inplace=True,
+                               drop=False)
+    doc_keywords_set = set(get_keywords_doc['keyword'])
+    shape_files_dict = create_npd_shapefile_dict()
+    key_cols = get_key_cols()
+    for key, value in shape_files_dict.items():
+        value['document'] = None
+        if key == 'well_header':
+            continue
+        keyword_col = key_cols[key]
+        value['cleaned_keywords'] = value[keyword_col].apply(clean_text)
+        value.set_index(['cleaned_keywords'], drop=False, inplace=True)
+        shape_keyset = set(list(pd.Series(value['cleaned_keywords'])))
+        matched_keys = shape_keyset.intersection(doc_keywords_set)
+        for matched_key in list(matched_keys):
+            matches = get_keywords_doc.loc[matched_key]
+            if isinstance(matches, pd.DataFrame):
+                docs = list(matches['cleaned_doc'])
+                list_of_docs = ','.join(docs)
+                value.loc[matched_key, 'document'] = list_of_docs
+            else:
+                value.loc[matched_key, 'document'] = matches['cleaned_doc']
+        output[key] = value
+    return output

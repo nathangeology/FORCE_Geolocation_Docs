@@ -81,4 +81,5 @@ def create_layer(geo_table, name, label_col=None, secondary_label_col=None, laye
             temp_layer.popup = message
             temp_layer.popup_max_width = 800
         output.add_layer(temp_layer)
+    geo_table.to_file(name + '.shp')
     return output
